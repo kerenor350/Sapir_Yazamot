@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8">
+  <title>מסע הקסם של עדי בעולם הקוד</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      direction: rtl;
+      background: linear-gradient(to bottom right, #ffe6f2, #e6f2ff);
+      padding: 30px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #cc3399;
+    }
+    #story {
+      margin-bottom: 20px;
+      font-size: 1.2em;
+    }
+    #question-box {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #fff0f5;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(204, 51, 153, 0.3);
+    }
+    .hidden { display: none; }
+    .options button {
+      background-color: #cc3399;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .options button:hover {
+      background-color: #ff66b3;
+    }
+    #feedback {
+      color: red;
+      font-weight: bold;
+    }
+    img {
+      max-width: 100%;
+      margin: 10px 0;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>מסע הקסם של עדי בעולם הקוד</h1>
+  <div id="story"></div>
+  <img id="story-img" src="" class="hidden">
+  <div id="question-box" class="hidden">
+    <p id="question"></p>
+    <div class="options" id="options"></div>
+    <p id="feedback"></p>
+  </div>
+
+  <script>
+    const storyParts = [
+      { text: "עדי, ילדה סקרנית שאוהבת תכנות, נכנסת למחשב קסום שמוביל אותה לעולם של קוד ואתגרים.", img: "https://cdn.pixabay.com/photo/2020/04/30/10/11/girl-5117100_1280.jpg" },
+      { text: "כדי לעבור את השער הראשון, עליה לפתור אתגר קידוד: מהי השארית של 17 בחלוקה ל-5?", question: { options: [2, 3, 1, 0], correct: 2 } },
+      { text: "עדי נכנסת למעבדת רובוטים ומוצאת מפת קוד עתיקה שמובילה לשלב הבא.", img: "https://cdn.pixabay.com/photo/2019/06/17/19/48/robot-4286557_1280.jpg" },
+      { text: "כדי להפעיל את הרובוט, עליה לפתור: מהי השארית של 23 בחלוקה ל-4?", question: { options: [3, 1, 0, 2], correct: 3 } },
+      { text: "הרובוט עוזר לה להיכנס לעולם המשחקים הדיגיטליים, שם היא פוגשת דמות מתכנתת שמאתגרת אותה.", img: "https://cdn.pixabay.com/photo/2016/11/29/03/53/robot-1867384_1280.jpg" },
+      { text: "מהי השארית של 14 בחלוקה ל-6?", question: { options: [2, 3, 1, 0], correct: 2 } },
+      { text: "עדי נכנסת לשלב ההרכבה, בו עליה לחבר קוד למנוע: השארית של 10 בחלוקה ל-4?", question: { options: [2, 1, 3, 0], correct: 2 } },
+      { text: "הקוד הופעל, והמערכת שואלת שאלה אחרונה כדי לשחרר את עדי חזרה לעולם האמיתי.", img: "https://cdn.pixabay.com/photo/2021/12/22/18/09/programming-6889570_1280.jpg" },
+      { text: "מהי השארית של 19 בחלוקה ל-5?", question: { options: [3, 4, 2, 1], correct: 4 } },
+      { text: "כל הכבוד! עדי חזרה מההרפתקה חכמה יותר ובטוחה בעצמה!", img: "https://cdn.pixabay.com/photo/2017/08/06/00/08/laptop-2589420_1280.jpg" }
+    ];
+
+    let currentIndex = 0;
+
+    function showNext() {
+      const story = document.getElementById("story");
+      const storyImg = document.getElementById("story-img");
+      const questionBox = document.getElementById("question-box");
+      const feedback = document.getElementById("feedback");
+      feedback.textContent = "";
+      questionBox.classList.add("hidden");
+
+      const part = storyParts[currentIndex];
+
+      story.innerHTML = `<p>${part.text}</p>`;
+      if (part.img) {
+        storyImg.src = part.img;
+        storyImg.classList.remove("hidden");
+      } else {
+        storyImg.classList.add("hidden");
+      }
+
+      if (part.question) {
+        questionBox.classList.remove("hidden");
+        document.getElementById("question").textContent = part.text;
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+        part.question.options.forEach((opt, index) => {
+          const btn = document.createElement("button");
+          btn.textContent = opt;
+          btn.onclick = () => checkAnswer(index, part.question.correct);
+          optionsDiv.appendChild(btn);
+        });
+      } else {
+        currentIndex++;
+        if (currentIndex < storyParts.length) {
+          setTimeout(showNext, 2500);
+        }
+      }
+    }
+
+    function checkAnswer(selected, correct) {
+      const feedback = document.getElementById("feedback");
+      if (selected === correct) {
+        currentIndex++;
+        showNext();
+      } else {
+        feedback.textContent = "נסה שוב";
+      }
+    }
+
+    // Start
+    showNext();
+  </script>
+</body>
+</html>
